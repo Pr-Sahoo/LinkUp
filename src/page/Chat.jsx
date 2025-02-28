@@ -107,13 +107,14 @@
 
 import React, {useState, useEffect} from "react";
 import {db , auth} from "../firebase";
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [users, setUsers] = useState([]);
+    // const [selecteduser, setSelecteduser] = useState(null);  // for private chat
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -158,11 +159,14 @@ const Chat = () => {
   return (
     <div className="flex h-screen w-full">
         {/* left user list  */}
-        <div className="w-1/4 bg-gray-900 text-white p-4 hidden md:block">
+        <div className="w-1/4 bg-gray-900 mt-3 text-white p-4 hidden md:block">
         <h2 className="text-lg font-semibold border-b pb-2">Members</h2>
         {users.map((user, index) => (
             <div key={index} className="p-2 border-b border-gray-700">
-                <p className="text-sm">{user.name || user.email}</p>
+                {/* <p className="text-sm">{user.name || user.email}</p> */}
+                {/* <p className="text-sm">{user.name || "No Name"}</p> */}
+                <p className="text-sm">{user.username || "user"}</p>
+                {/* <p>{username}</p> */}
                 <p className="text-xs text-gray-400">{user.email}</p>
             </div>
         ))}

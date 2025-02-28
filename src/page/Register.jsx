@@ -1,19 +1,31 @@
 import React from 'react';
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { setDoc, doc } from 'firebase/firestore';
 
 const Register = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            // await createUserWithEmailAndPassword(auth, email, password);
+            // navigate("/chat");
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            //store user info in firebase 
+            await setDoc(doc(db, "users", user.uid), {
+                uid: user.uid,
+                email: user.email,
+                username: username, 
+            })
             navigate("/chat");
         } catch (error) {
             console.error(error.message);
@@ -84,8 +96,22 @@ const Register = () => {
 
                     {/* Registration Form */}
                     <form onSubmit={handleRegister} className="mt-4">
-                        {/* Email */}
+                        {/* name  */}
                         <label className="block mb-2 text-sm font-medium text-gray-600">
+                            User Name
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="Your Name"
+                            className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring focus:ring-opacity-40"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+
+                        {/* Email */}
+                        {/* <label className="block mb-2 text-sm font-medium text-gray-600"> */}
+                        <label  className='block mt-4 mb-2 text-sm font-medium text-gray-600'>
                             Email Address
                         </label>
                         <input
