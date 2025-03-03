@@ -147,7 +147,7 @@ const Register = () => {
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                         <a href="#" className="text-xs text-gray-500 uppercase hover:underline">
                             {/* Already have an account? Sign In */}
-                            OR SignUp
+                            OR Login
                         </a>
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                     </div>
