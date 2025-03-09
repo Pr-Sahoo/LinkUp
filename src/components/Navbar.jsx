@@ -8,7 +8,7 @@ const Navbar = () => {
       <div className="container px-6 py-4 mx-auto">
         <div className="lg:flex lg:items-center">
           <div className="flex items-center justify-between">
-            <a href="#">
+            <a href="/">
               <img
                 className="w-auto h-6 sm:h-7"
                 src="https://merakiui.com/images/full-logo.svg"

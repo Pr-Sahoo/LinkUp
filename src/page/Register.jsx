@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { setDoc, doc } from 'firebase/firestore';
+import Particles from '../components/Particles';
 
 const Register = () => {
 
@@ -45,15 +46,26 @@ const Register = () => {
         //     </div>
         //   );
 
-        <div className="flex items-center justify-center w-full min-h-screen px-4 bg-blue-500">
+        <div className="flex items-center justify-center w-full min-h-screen px-4 ">
+            <Particles 
+            particleColors={['#ffffff', '#ffffff']}
+            particleCount={200}
+            particleSpread={10}
+            speed={0.1}
+            particleBaseSize={100}
+            moveParticlesOnHover={true}
+            alphaParticles={false}
+            disableRotation={false}
+            />
             {/* Container with two sections */}
-            <div className="flex w-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg">
+            <div className="flex w-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-lg" style={{background: "#CADCFC"}}>
                 {/* Left side image (Hidden on small screens) */}
                 <div
                     className="hidden bg-cover lg:block lg:w-1/2"
                     style={{
                         backgroundImage:
-                            "url('https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80')",
+                        "url('https://images.unsplash.com/photo-1738597967526-fca7534cdd5c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDkxfGJvOGpRS1RhRTBZfHxlbnwwfHx8fHw%3D')",    
+                        // "url('https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80')",
                     }}
                 ></div>
 
@@ -145,7 +157,7 @@ const Register = () => {
                     {/* Already have an account? */}
                     <div className="flex items-center justify-between mt-4">
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-                        <a href="#" className="text-xs text-gray-500 uppercase hover:underline">
+                        <a href="/login" className="text-xs text-gray-500 uppercase hover:underline">
                             {/* Already have an account? Sign In */}
                             OR Login
                         </a>

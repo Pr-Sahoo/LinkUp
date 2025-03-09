@@ -6,6 +6,7 @@ import ForgotPW from './page/ForgotPW';
 import Register from './page/Register';
 import Login from './page/Login';
 import Chat from './page/Chat';
+import Home from './page/Home';
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -18,6 +19,7 @@ function App() {
           <Route path='/forgot' element={<ForgotPW/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/chat' element={<Chat/>}/>
+          <Route path='/' element={<Home/>}/>
         </Routes>
     </Router>
   )
