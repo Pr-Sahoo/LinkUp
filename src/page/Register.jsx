@@ -34,17 +34,6 @@ const Register = () => {
     };
 
     return (
-        //     <div className='flex justify-center text-black items-center min-h-screen w-full px-4 bg-blue-500'>
-        //         <div className="bg-blue-300 p-6 sm:p-8 rounded-lg shadow-md w-full max-w-sm sm:max-w-md lg:max-w-lg">
-        //             <h2 className='text-xl font-bold text-center mb-4'>Register</h2>
-        //             <form onSubmit={handleRegister}>
-        //                 <input type="email" placeholder='Email' className='w-full p-2 mb-2 border rounded' value={email} onChange={(e) => setEmail(e.target.value)} required/>
-        //                 <input type="password" placeholder='Password' className="p-2 mb-2 text-black w-full border rounded" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-        //                 <button className='w-full bg-blue-500 text-white rounded p-2'>Register</button>
-        //             </form>
-        //         </div>
-        //     </div>
-        //   );
 
         <div className="flex items-center justify-center w-full min-h-screen px-4 ">
             <Particles 

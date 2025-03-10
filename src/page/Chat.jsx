@@ -125,15 +125,6 @@ const Chat = () => {
         }
     };
 
-    // const handleUpload = async (url, filetype) => {
-    //     await addDoc(collection(db, "messages"), {
-    //         text: url,
-    //         sender: auth.currentUser.uid,
-    //         type: filetype.includes("image") ? "image" : filetype.includes("video") ? "video" : "file",
-    //         timestamp: serverTimestamp(),
-    //     });
-    // };
-
     //new handleUpload for manage of the file metadata
     const handleUpload = async (url, filetype, fileName) => {
         let chatId = "group_chat";
@@ -154,56 +145,6 @@ const Chat = () => {
             timestamp: serverTimestamp(),
         });
     };
-
-    // const handleEdit = (message) => {
-    //     setShowModal(true);
-    //     setEditingMessage(message);
-    //     setEditingMsgText(message.text || "");
-    // };
-
-    // const saveEdit = async () => {
-    //     if (!editingMessage || editingMsgText.trim() === "") return;
-
-    //     try {
-    //         await updateDoc(doc(db, "messages", editingMessage.id), {
-    //             text: editingMsgText,
-    //             timestamp: serverTimestamp(),
-    //         });
-    //         setShowModal(false);
-    //         setEditingMessage(null);
-    //         setEditingMsgText("");
-    //     } catch (error) {
-    //         console.error("Error Updating message: ", error);
-    //     }
-    // };
-
-    // function to handle file selection
-    // const handleFileChange = (e) => {
-    //     if(e.target.files.length > 0 ) {
-    //         setFile(e.target.files[0]);
-    //     }
-    // };
-
-    // function to upload file to firebase storage
-    // const uploadFile = async (file) => {
-    //     setUploading(true);
-    //     const fileRef = ref(storage, `uploads/${auth.currentUser.uid}/${file.name}`);
-    //     const uploadTask = uploadBytesResumable(fileRef, file);
-
-    //     return new Promise((res, rej) => {
-    //         uploadTask.on("state_changed", null,
-    //             (error) => {
-    //                 console.error("Upload Failed: ", error);
-    //                 setUploading(false);
-    //                 rej(error);
-    //             }, async () => {
-    //                 const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-    //                 setUploading(false);
-    //                 res(downloadUrl);
-    //             }
-    //         );
-    //     });
-    // };
 
     return (
         <div className="flex h-screen w-full">
@@ -312,6 +253,16 @@ const Chat = () => {
                                     </div>
                                 ) : (
                                     <p className="text-lg font-bold">{msg.text}</p>
+                                )}
+                                {msg.user === auth.currentUser.email && (
+                                    <div className="relative inline-block group float-right ml-auto mr-2 mb-4">
+                                        <span className="text-black hover:text-gray-900 cursor-pointer">:</span>
+                                        <div className="absolute right-0 mt-2 w-32 rounded-md shadow-lg z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                            <div>
+                                                <button onClick={() => deleteMsg(msg.id)} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 hover:text-red-700">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 )}
                                 <p className="text-xs font-light">{msg.timestamp ? msg.timestamp.toDate().toLocaleString() : "Loading..."}</p>
                             </div>
