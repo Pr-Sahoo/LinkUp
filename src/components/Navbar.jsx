@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Navbar = () => {
+const Navbar = () => {        // remove the toggleChat from this props now recently toogleSidebar
   const [isOpen, setIsOpen] = useState(false);
 
   return (
