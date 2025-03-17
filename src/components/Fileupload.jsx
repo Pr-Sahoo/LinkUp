@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { storage } from '../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { div } from 'three/tsl';
-// import { div } from 'three/tsl';
+
+
 
 const Fileupload = ({ onFileUpload }) => {
     const [file, setFile] = useState(null);

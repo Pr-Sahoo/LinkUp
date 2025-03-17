@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {        // remove the toggleChat from this props now recently toogleSidebar
   const [isOpen, setIsOpen] = useState(false);
@@ -70,9 +71,10 @@ const Navbar = () => {        // remove the toggleChat from this props now recen
               <a href="#" className="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">
                 Support
               </a>
-              <a href="#" className="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">
-                Blog
-              </a>
+              {/* <a href="/private-chat" className="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">
+                Private-chat
+              </a> */}
+              <Link to="/private-chat" className="mt-2 lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200">Private-chat</Link>
 
               {/* Search Box */}
               <div className="relative mt-4 lg:mt-0 lg:mx-4">
