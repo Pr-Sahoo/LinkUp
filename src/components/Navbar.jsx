@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {        // remove the toggleChat from this props now recently toogleSidebar
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  if(location.pathname.startsWith("/private-chat/")) {
+    return null;
+  }
 
   return (
     <nav className="bg-white shadow dark:bg-gray-800 fixed top-0 left-0 w-full z-50">
