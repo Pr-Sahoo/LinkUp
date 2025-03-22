@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
-import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, getDocs, deleteDoc, doc } from 'firebase/firestore';
 // import Fileupload from '../components/Fileupload';
+import Hyperspeed from '../components/Hyperspeed';
 
 const PrivateChat = () => {
     const { userId: selectedUserId } = useParams();      //get selected user chatId by url
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);        // store selected user details
+    const [activeMessageId, setActiveMessageId] = useState(null);
     const navigate = useNavigate();
 
     // generate unique chat id for private chat
@@ -36,6 +38,7 @@ const PrivateChat = () => {
         if (!auth.currentUser || !selectedUserId) return;
 
         const chatId = getChatId(auth.currentUser.uid, selectedUserId);
+        // const chatId = getChatId(auth.currentUser.email, selectedUserId) // new added the user email id new one
         const messageRef = collection(db, "messages");
         const q = query(messageRef, where("chatId", "==", chatId), orderBy("timestamp", "asc"));
 
@@ -51,15 +54,63 @@ const PrivateChat = () => {
         if (!newMessage.trim() === "") return;
 
         const chatId = getChatId(auth.currentUser.uid, selectedUserId);
+        // const chatId = getChatId(auth.currentUser.email, selectedUserId); // added new user email id
         await addDoc(collection(db, "messages"), {
             text: newMessage,
             user: auth.currentUser.email,
+            userId: auth.currentUser.uid,
             receiver: selectedUser.email,
             chatId: chatId,
             timestamp: serverTimestamp(),
         });
         setNewMessage("");
     };
+
+    // Handle Message hold (long press or click and hold)
+    const handleMessageHold = (messageId) => {
+        const timeoutId = setTimeout(() => {
+            setActiveMessageId(messageId)
+        }, 1500);                             // show delete button after 2 secs
+        return timeoutId;
+    };
+
+    // clear timeout if message released (clear timeout if release early)
+    // const handleMessageRelease = (messageId) => {
+    //     clearTimeout(messageId);
+    // };
+    const handleMessageRelease = (timeoutId) => {
+        clearTimeout(timeoutId);
+    }
+
+    // delete a message
+    const deleteMessage = async (messageId) => {
+        console.log("Deleting message with id: ", messageId);   // debugging
+        console.log("Current user UID: ", auth.currentUser.uid);  // debugging
+        try {
+            await deleteDoc(doc(db, "messages", messageId))   // delete message from firestore
+            setActiveMessageId(null);         // hide the delete button after deletion 
+            console.log("message deleted successfully");
+        } catch (error) {
+            console.error("Error in deleting message: ", error);
+        };
+    };
+
+    // handle click outside the message to hide the delete button
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (activeMessageId && !e.target.closest(".message-container")) {
+                setActiveMessageId(null);                   // hide the delete button
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [activeMessageId]);
 
     // Handle file upload
     // const handleUpload = async (url, filetype, filename) => {
@@ -128,7 +179,46 @@ const PrivateChat = () => {
 
 
 
-        <div className="flex h-screen w-full bg-gray-100">
+        <div className="flex h-screen w-full">
+            <Hyperspeed
+                    effectOptions={{
+                        onSpeedUp: () => { },
+                        onSlowDown: () => { },
+                        distortion: 'turbulentDistortion',
+                        length: 400,
+                        roadWidth: 10,
+                        islandWidth: 2,
+                        lanesPerRoad: 4,
+                        fov: 90,
+                        fovSpeedUp: 150,
+                        speedUp: 2,
+                        carLightsFade: 0.4,
+                        totalSideLightSticks: 20,
+                        lightPairsPerRoadWay: 40,
+                        shoulderLinesWidthPercentage: 0.05,
+                        brokenLinesWidthPercentage: 0.1,
+                        brokenLinesLengthPercentage: 0.5,
+                        lightStickWidth: [0.12, 0.5],
+                        lightStickHeight: [1.3, 1.7],
+                        movingAwaySpeed: [60, 80],
+                        movingCloserSpeed: [-120, -160],
+                        carLightsLength: [400 * 0.03, 400 * 0.2],
+                        carLightsRadius: [0.05, 0.14],
+                        carWidthPercentage: [0.3, 0.5],
+                        carShiftX: [-0.8, 0.8],
+                        carFloorSeparation: [0, 5],
+                        colors: {
+                            roadColor: 0x080808,
+                            islandColor: 0x0a0a0a,
+                            background: 0x000000,
+                            shoulderLines: 0xFFFFFF,
+                            brokenLines: 0xFFFFFF,
+                            leftCars: [0xD856BF, 0x6750A2, 0xC247AC],
+                            rightCars: [0x03B3C3, 0x0E5EA5, 0x324555],
+                            sticks: 0x03B3C3,
+                        }
+                    }}
+                />
             {/* Chat Container */}
             <div className="flex flex-col flex-1 h-full w-full justify-between">    {/* removed the justify-between */}
                 {/* Chat Header */}
@@ -160,7 +250,7 @@ const PrivateChat = () => {
                     </button> old button */}
 
                 {/*new chat header  */}
-                <div className='flex items-center justify-between p-3 md:p-4 bg-white border-b shadow-md'>
+                <div className='flex items-center justify-between p-3 md:p-4 border-b shadow-md' style={{backgroundColor: "#408EC6"}}>
                     <div className='flex items-center space-x-3 md:space-x-4'>
                         <img
                             src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
@@ -181,6 +271,29 @@ const PrivateChat = () => {
                             key={msg.id}
                             className={`flex items-end ${msg.user === auth.currentUser.email ? "justify-end" : ""
                                 }`}
+                            onMouseDown={(e) => {
+                                if (msg.user === auth.currentUser.email) {
+                                    const timeoutId = handleMessageHold(msg.id);   //start hold timer
+                                    e.currentTarget.timeoutId = timeoutId;       //store timeout id   
+                                }
+                            }}
+                            onMouseUp={(e) => {
+                                if (msg.user === auth.currentUser.email) {
+                                    handleMessageRelease(e.currentTarget.timeoutId);   // clear timeout
+                                }
+                            }
+                            }
+                            onTouchStart={(e) => {
+                                if (msg.user === auth.currentUser.email) {
+                                    const timeoutId = handleMessageHold(msg.id);  // start hold timer
+                                    e.currentTarget.timeoutId = timeoutId;        //store timeout id
+                                }
+                            }}
+                            onTouchEnd={(e) => {
+                                if (msg.user === auth.currentUser.email) {
+                                    handleMessageRelease(e.currentTarget.timeoutId);      // clear timeout id
+                                }
+                            }}
                         >
                             <div
                                 className={`flex flex-col space-y-2 text-xs max-w-xs mx-2 ${msg.user === auth.currentUser.email
@@ -198,6 +311,10 @@ const PrivateChat = () => {
                                         {msg.text}
                                     </span> */}
                                     <span className={`px-4 py-2 rounded-lg inline-block text-sm md:text-base lg:text-lg ${msg.user === auth.currentUser.email ? "bg-blue-600 text-white rounded-br-none" : "bg-gray-300 text-gray-600 rounded-bl-none"}`}>{msg.text}</span>
+                                    {/* delete button only show to the active messages */}
+                                    {activeMessageId === msg.id && msg.user === auth.currentUser.email && (
+                                        <button onClick={() => deleteMessage(msg.id)} className='mt-1 bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600'>Delete</button>
+                                    )}
                                 </div>
                             </div>
                             <img
