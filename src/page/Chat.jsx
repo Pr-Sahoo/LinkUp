@@ -106,7 +106,7 @@ const Chat = () => {
         setMessage("");
     };
 
-    //function to delete messages
+    // function to delete messages
     const deleteMsg = async (id) => {
         if (!id) return;
         const confirmDel = window.confirm("Are you sure you want to delete this message?");
@@ -140,7 +140,7 @@ const Chat = () => {
         });
     };
 
-    useEffect(() => {
+    useRef(() => {
         if(messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({behaviour: "smooth"});
         }

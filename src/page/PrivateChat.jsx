@@ -44,14 +44,17 @@ const PrivateChat = () => {
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        }, (error) => {
+            console.error("Error fetching messages: ", error);
         });
         return () => unsubscribe();
     }, [selectedUserId]);
 
-    //send a new message 
+    // send a new message 
     const sendMessage = async (e) => {
         e.preventDefault();
-        if (!newMessage.trim() === "") return;
+        // if (!newMessage.trim() === "") return;
+        if (!newMessage.trim()) return;       //added
 
         const chatId = getChatId(auth.currentUser.uid, selectedUserId);
         // const chatId = getChatId(auth.currentUser.email, selectedUserId); // added new user email id
@@ -60,11 +63,17 @@ const PrivateChat = () => {
             user: auth.currentUser.email,
             userId: auth.currentUser.uid,
             receiver: selectedUser.email,
+            // receiver: selectedUser?.email,
             chatId: chatId,
             timestamp: serverTimestamp(),
         });
         setNewMessage("");
     };
+
+    // const handleMessageClick = (messageId) => {
+    //     console.log("Message clicked: ", messageId);
+    //     setActiveMessageId(messageId);
+    // }
 
     // Handle Message hold (long press or click and hold)
     const handleMessageHold = (messageId) => {
@@ -74,10 +83,6 @@ const PrivateChat = () => {
         return timeoutId;
     };
 
-    // clear timeout if message released (clear timeout if release early)
-    // const handleMessageRelease = (messageId) => {
-    //     clearTimeout(messageId);
-    // };
     const handleMessageRelease = (timeoutId) => {
         clearTimeout(timeoutId);
     }
@@ -86,12 +91,14 @@ const PrivateChat = () => {
     const deleteMessage = async (messageId) => {
         console.log("Deleting message with id: ", messageId);   // debugging
         console.log("Current user UID: ", auth.currentUser.uid);  // debugging
+        // const confirmDel = window.confirm("Are you sure want to delete message?"); //added
         try {
             await deleteDoc(doc(db, "messages", messageId))   // delete message from firestore
             setActiveMessageId(null);         // hide the delete button after deletion 
             console.log("message deleted successfully");
         } catch (error) {
             console.error("Error in deleting message: ", error);
+            alert("Failed to delete message: " + error.message);  //added 
         };
     };
 
@@ -132,125 +139,52 @@ const PrivateChat = () => {
     };
 
     return (
-        // <div className='flex h-full w-full'>
-        // <div className='flex flex-col h-screen justify-center bg-gray-900 text-white p-4 w-full'>
-        //     {/* Chat Header  */}
-        //     <div className='bg-gray-800 text-white p-10 mt-2 flex justify-between items-center md:text-sm'>
-        //         <h1 className='text-lg font-semibold'>Chatting with {selectedUser?.username || selectedUser?.email}</h1>
-        //         <button onClick={leaveChat} className='bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600'>Leave chat</button>
-        //     </div>
-
-        //     {/* Chat messages */}
-        //     <div className='flex-1 overflow-y-auto p-4 bg-gray-800'>
-        //         {messages.map((msg) => (
-        //             <div key={msg.id} className={`mb-4 p-2 rounded-lg max-w-lg ${
-        //                 msg.user === auth.currentUser.email ? "bg-blue-500 text-white self-end ml-auto" : "bg-gray-700 text-gray-200 self-start mr-auto"
-        //             }`}>
-        //                 <p>{msg.user === auth.currentUser.email ? "You" : msg.user}</p>
-        //                 {msg.fileUrl ? (
-        //                     <div>
-        //                         {msg.fileType.includes("image") ? (
-        //                             <img src={msg.fileUrl} alt={msg.text} className='max-w-full h-auto rounded-lg' />
-        //                         ) : (
-        //                             <a href={msg.fileUrl} target='_blank' rel='noopener noreferrer' className='text-blue-300 underline'>Download {msg.text}</a>
-        //                         )}
-        //                     </div>
-        //                 ) : (
-        //                     <p className='text-lg font-bold'>{msg.text}</p>
-        //                 )}
-        //                 <p className='text-xs font-light'>{msg.timestamp ? msg.timestamp.toDate().toLocaleString() : "Loading..."}</p>
-        //             </div>
-        //         ))}
-        //     </div>
-
-        //     {/* Input field */}
-        //     <form onSubmit={sendMessage} className='flex bg-gray-800 p-4'>
-        //         <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} className='flex-1  bg-gray-700 text-white p-2 outline-none rounded-l-lg' />
-        //         <button type='submit' className='bg-blue-500 text-white px-4 rounded-r-lg hover:bg-blue-600'>Send</button>
-        //     </form>
-
-        //     {/* file upload component */}
-        //     <Fileupload onFileUpload={handleUpload}/>
-        // </div>
-        // </div>
-
-
-
-
-
 
         <div className="flex h-screen w-full">
             <Hyperspeed
-                    effectOptions={{
-                        onSpeedUp: () => { },
-                        onSlowDown: () => { },
-                        distortion: 'turbulentDistortion',
-                        length: 400,
-                        roadWidth: 10,
-                        islandWidth: 2,
-                        lanesPerRoad: 4,
-                        fov: 90,
-                        fovSpeedUp: 150,
-                        speedUp: 2,
-                        carLightsFade: 0.4,
-                        totalSideLightSticks: 20,
-                        lightPairsPerRoadWay: 40,
-                        shoulderLinesWidthPercentage: 0.05,
-                        brokenLinesWidthPercentage: 0.1,
-                        brokenLinesLengthPercentage: 0.5,
-                        lightStickWidth: [0.12, 0.5],
-                        lightStickHeight: [1.3, 1.7],
-                        movingAwaySpeed: [60, 80],
-                        movingCloserSpeed: [-120, -160],
-                        carLightsLength: [400 * 0.03, 400 * 0.2],
-                        carLightsRadius: [0.05, 0.14],
-                        carWidthPercentage: [0.3, 0.5],
-                        carShiftX: [-0.8, 0.8],
-                        carFloorSeparation: [0, 5],
-                        colors: {
-                            roadColor: 0x080808,
-                            islandColor: 0x0a0a0a,
-                            background: 0x000000,
-                            shoulderLines: 0xFFFFFF,
-                            brokenLines: 0xFFFFFF,
-                            leftCars: [0xD856BF, 0x6750A2, 0xC247AC],
-                            rightCars: [0x03B3C3, 0x0E5EA5, 0x324555],
-                            sticks: 0x03B3C3,
-                        }
-                    }}
-                />
+                effectOptions={{
+                    onSpeedUp: () => { },
+                    onSlowDown: () => { },
+                    distortion: 'turbulentDistortion',
+                    length: 400,
+                    roadWidth: 10,
+                    islandWidth: 2,
+                    lanesPerRoad: 4,
+                    fov: 90,
+                    fovSpeedUp: 150,
+                    speedUp: 2,
+                    carLightsFade: 0.4,
+                    totalSideLightSticks: 20,
+                    lightPairsPerRoadWay: 40,
+                    shoulderLinesWidthPercentage: 0.05,
+                    brokenLinesWidthPercentage: 0.1,
+                    brokenLinesLengthPercentage: 0.5,
+                    lightStickWidth: [0.12, 0.5],
+                    lightStickHeight: [1.3, 1.7],
+                    movingAwaySpeed: [60, 80],
+                    movingCloserSpeed: [-120, -160],
+                    carLightsLength: [400 * 0.03, 400 * 0.2],
+                    carLightsRadius: [0.05, 0.14],
+                    carWidthPercentage: [0.3, 0.5],
+                    carShiftX: [-0.8, 0.8],
+                    carFloorSeparation: [0, 5],
+                    colors: {
+                        roadColor: 0x080808,
+                        islandColor: 0x0a0a0a,
+                        background: 0x000000,
+                        shoulderLines: 0xFFFFFF,
+                        brokenLines: 0xFFFFFF,
+                        leftCars: [0xD856BF, 0x6750A2, 0xC247AC],
+                        rightCars: [0x03B3C3, 0x0E5EA5, 0x324555],
+                        sticks: 0x03B3C3,
+                    }
+                }}
+            />
             {/* Chat Container */}
             <div className="flex flex-col flex-1 h-full w-full justify-between z-10">    {/* removed the justify-between */}
-                {/* Chat Header */}
-
-                {/* <div className="flex items-center justify-between p-1 bg-white border-b-2 border-gray-200 md:p-4"> */}
-                {/* <div className="flex items-center space-x-4 sm:text-sm md:text-sm">  old line */}
-                {/* <div className='flex items-center space-x-2 md:space-x-4'>
-                        <div className="relative">
-                            <img
-                                src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
-                                alt="User Avatar"
-                                className="w-8 h-8 md:w-10 md:h-10 rounded-full"
-                            />
-                            <span className="absolute bottom-0 right-0 w-2 h-2 md:w-3 md:h-3  bg-green-500 rounded-full"></span>
-                        </div>
-                        <div className="flex text-black flex-col"> */}
-                {/* <h1 className="text-lg md:text-xl lg:text-2xl font-semibold"> */}
-                {/* <h1 className='font-semibold text-sm md:text-base lg:text-lg'>
-                                Chatting with {selectedUser?.username || selectedUser?.email}
-                            </h1> */}
-                {/* <span className="text-sm text-gray-500">Online</span> old line */}
-                {/* </div> */}
-                {/* </div> */}
-                {/* <button
-                        onClick={leaveChat}
-                        className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm md:text-base"
-                    >
-                        Leave Chat
-                    </button> old button */}
 
                 {/*new chat header  */}
-                <div className='flex items-center justify-between p-3 md:p-4 border-b shadow-md' style={{backgroundColor: "#408EC6"}}>
+                <div className='flex items-center justify-between p-3 md:p-4 border-b shadow-md' style={{ backgroundColor: "#408EC6" }}>
                     <div className='flex items-center space-x-3 md:space-x-4'>
                         <img
                             // src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
@@ -312,9 +246,13 @@ const PrivateChat = () => {
                                         {msg.text}
                                     </span> */}
                                     <span className={`px-4 py-2 rounded-lg inline-block text-sm md:text-base lg:text-lg ${msg.user === auth.currentUser.email ? "bg-blue-600 text-white rounded-br-none" : "bg-gray-300 text-gray-600 rounded-bl-none"}`}>{msg.text}</span>
+                                    <p className="text-xs opacity-50 mt-1">
+                                        {msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleTimeString() : "Loading..."}
+                                    </p>
                                     {/* delete button only show to the active messages */}
                                     {activeMessageId === msg.id && msg.user === auth.currentUser.email && (
-                                        <button onClick={() => deleteMessage(msg.id)} className='mt-1 bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600'>Delete</button>
+                                        // <button onClick={() => deleteMessage(msg.id)} className='mt-1 bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600'>Delete</button>
+                                        <button onClick={(e) => { e.stopPropagation(); deleteMessage(msg.id) }} className='mt-1 bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600'>Delete</button>
                                     )}
                                 </div>
                             </div>

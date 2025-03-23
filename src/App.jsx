@@ -10,6 +10,7 @@ import Home from './page/Home';
 import Userlist from './page/Userlist';
 import PrivateChat from './page/PrivateChat';
 import Choice from './page/Choice';
+import Chatting from './page/Chatting';
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -26,6 +27,7 @@ function App() {
         <Route path='/private-chat' element={<Userlist />} />
         <Route path='/private-chat/:userId' element={<PrivateChat />} />
         <Route path='/choice' element={<Choice/>} />
+        <Route path='/chatting' element={<Chatting/>}/>
       </Routes>
     </Router>
   )

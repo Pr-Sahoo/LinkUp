@@ -74,7 +74,7 @@ const Choice = () => {
                         </button>
                     </Link> */}
 
-                    <Link to='/chat'>
+                    <Link to='/chatting'>
                         <button
                             type="button"
                             className="mr-6 text-white font-bold px-8 py-6 sm:px-10 sm:py-8 md:px-12 md:py-10 lg:px-16 lg:py-12 xl:px-20 xl:py-14 
