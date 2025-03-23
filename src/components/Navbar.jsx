@@ -5,7 +5,13 @@ const Navbar = () => {        // remove the toggleChat from this props now recen
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  if(location.pathname.startsWith("/private-chat/")) {
+  // if(location.pathname.startsWith("/private-chat/")) {
+  //   return null;
+  // }
+  // if(["/private-chat", "/", "/register", "/login","/choice"].includes(location.pathname)) {
+  //   return null;
+  // }
+  if(location.pathname.startsWith("/private-chat") || ["/", "/register", "/login", "/choice"].includes(location.pathname)) {
     return null;
   }
 

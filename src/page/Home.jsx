@@ -1,10 +1,8 @@
 import React from 'react';
 import Particles from '../components/Particles';
-// import Register from './Register';
 import BlurText from '../components/Blurtext';
 import AnimatedContent from '../components/AnimatedContent';
 import { Link } from 'react-router-dom';
-// import Footer from '../components/Footer';
 
 const Home = () => {
 
@@ -14,7 +12,7 @@ const Home = () => {
       <div className="absolute inset-0 z-0">
         <Particles
           particleColors={['#ffffff', '#ffffff']}
-          particleCount={200}
+          particleCount={500}
           particleSpread={10}
           speed={0.1}
           particleBaseSize={100}
@@ -39,7 +37,7 @@ const Home = () => {
         <AnimatedContent
           distance={100}
           direction="vertical"
-          delay={1500}
+          delay={500}
           reverse={false}
           config={{ tension: 120, friction: 30 }}
           initialOpacity={0}
@@ -47,19 +45,26 @@ const Home = () => {
           scale={1.1}
           threshold={0.2}
         >
-          {/* <div className='text-4xl'>Get Started</div> */}
-          {/* <button type="button" class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-8xl px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">Purple</button> */}
-          {/* <Link to='/register'><button type="button" class="text-white text-6xl font-bold px-10 py-6 bg-purple-700 border border-purple-700 rounded-xl shadow-lg hover:bg-purple-800 hover:shadow-purple-500/50 transition-all duration-300 focus:ring-4 focus:ring-purple-300">
+
+          {/* <Link to='/register'><button type="button" class="sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl py-8 text-white text-6xl font-bold px-12 bg-purple-700 border border-purple-700 rounded-xl shadow-lg hover:bg-purple-800 hover:shadow-purple-500/50 transition-all duration-300 focus:ring-4 focus:ring-purple-300">
             GET STARTED
           </button></Link> */}
 
-          <Link to='/register'><button type="button" class="sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl py-8 text-white text-6xl font-bold px-12 bg-purple-700 border border-purple-700 rounded-xl shadow-lg hover:bg-purple-800 hover:shadow-purple-500/50 transition-all duration-300 focus:ring-4 focus:ring-purple-300">
-            GET STARTED
-          </button></Link>
+          <Link to='/register'>
+            <button
+              type="button"
+              className="mt-6 sm:mt-0 text-white font-bold px-8 py-6 sm:px-10 sm:py-8 md:px-12 md:py-10 lg:px-16 lg:py-12 xl:px-20 xl:py-14
+                                                 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl
+                                                 bg-blue-700 border border-blue-700 rounded-xl shadow-lg
+                                                 hover:bg-blue-800 transition-all duration-300 focus:ring-4 focus:ring-blue-300
+                                                 shadow-blue-500/50 hover:shadow-blue-400"
+            >
+              Get Started
+            </button>
+          </Link>
 
         </AnimatedContent>
       </div>
-      {/* <Footer className='relative z-10 w-full bg-black text-white text-center p-4 shadow-md border-t border-gray-700'/> */}
     </div>
 
   )

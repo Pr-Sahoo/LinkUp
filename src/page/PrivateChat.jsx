@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, getDocs, deleteDoc, doc } from 'firebase/firestore';
@@ -220,7 +220,7 @@ const PrivateChat = () => {
                     }}
                 />
             {/* Chat Container */}
-            <div className="flex flex-col flex-1 h-full w-full justify-between">    {/* removed the justify-between */}
+            <div className="flex flex-col flex-1 h-full w-full justify-between z-10">    {/* removed the justify-between */}
                 {/* Chat Header */}
 
                 {/* <div className="flex items-center justify-between p-1 bg-white border-b-2 border-gray-200 md:p-4"> */}
@@ -253,7 +253,8 @@ const PrivateChat = () => {
                 <div className='flex items-center justify-between p-3 md:p-4 border-b shadow-md' style={{backgroundColor: "#408EC6"}}>
                     <div className='flex items-center space-x-3 md:space-x-4'>
                         <img
-                            src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
+                            // src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
+                            src='https://static.vecteezy.com/system/resources/previews/022/715/778/non_2x/cute-cool-boy-dabbing-pose-cartoon-icon-illustration-people-fashion-icon-concept-isolated-generat-ai-free-photo.jpg'
                             alt="User Avatar"
                             className="w-8 h-8 md:w-10 md:h-10 rounded-full" />
                         <h1 className='font-semibold text-sm md:text-base lg:text-lg truncate text-black'>{selectedUser?.username || selectedUser?.email}</h1>
@@ -320,8 +321,8 @@ const PrivateChat = () => {
                             <img
                                 src={
                                     msg.user === auth.currentUser.email
-                                        ? "https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
-                                        : "https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=144&h=144"
+                                        ? "https://static.vecteezy.com/system/resources/previews/022/715/778/non_2x/cute-cool-boy-dabbing-pose-cartoon-icon-illustration-people-fashion-icon-concept-isolated-generat-ai-free-photo.jpg"
+                                        : "https://i.pinimg.com/736x/aa/d0/6e/aad06ea779427e507017ffa808fb5a17.jpg"
                                 }
                                 alt="User Avatar"
                                 className={`w-6 h-6 rounded-full ${msg.user === auth.currentUser.email ? "order-2" : "order-1"

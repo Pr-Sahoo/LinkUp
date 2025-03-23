@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { db, auth } from "../firebase";
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, where, deleteDoc, updateDoc } from "firebase/firestore";
 // import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -17,6 +17,7 @@ const Chat = () => {
 
 
     const navigate = useNavigate();
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
         if (!auth.currentUser) {
@@ -139,6 +140,12 @@ const Chat = () => {
         });
     };
 
+    useEffect(() => {
+        if(messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({behaviour: "smooth"});
+        }
+    },[messages]);
+
     return (
         <div className="flex h-screen w-full">
             {/* left user list  */}
@@ -237,6 +244,7 @@ const Chat = () => {
                                 <p className="text-xs font-light">{msg.timestamp ? msg.timestamp.toDate().toLocaleString() : "Loading..."}</p>
                             </div>
                         ))}
+                        <div ref={messagesEndRef}/>
                     </div>
 
                     <Fileupload onFileUpload={handleUpload} />

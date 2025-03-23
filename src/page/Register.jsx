@@ -27,7 +27,8 @@ const Register = () => {
                 email: user.email,
                 username: username, 
             })
-            navigate("/chat");
+            // navigate("/chat");
+            navigate('/choice');
         } catch (error) {
             console.error(error.message);
         }

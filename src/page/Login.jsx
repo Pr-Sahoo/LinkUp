@@ -14,7 +14,8 @@ const Login = () => {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate("/chat");
+            // navigate("/chat");
+            navigate('/choice');
         } catch (error) {
             console.error(error.message);
         }
