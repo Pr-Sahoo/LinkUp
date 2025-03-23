@@ -1,6 +1,6 @@
 import React from 'react';
 import Particles from '../components/Particles';
-import BlurText from '../components/Blurtext';
+import BlurText from '../components/BlurText';
 import AnimatedContent from '../components/AnimatedContent';
 import { Link } from 'react-router-dom';
 
