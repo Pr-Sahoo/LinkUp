@@ -4,6 +4,7 @@ import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import Particles from '../components/Particles';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -142,10 +143,10 @@ const Login = () => {
                         {/* Already have an account? */}
                         <div className="flex items-center justify-between mt-4">
                             <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-                            <a href="/register" className="text-xs text-gray-500 uppercase hover:underline">
+                            <Link to="/register" className="text-xs text-gray-500 uppercase hover:underline">
                                 {/* Already have an account? Sign In */}
                                 OR Sign Up!
-                            </a>
+                            </Link>
                             <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                         </div>
                     </div>

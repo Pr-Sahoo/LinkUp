@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { setDoc, doc } from 'firebase/firestore';
 import Particles from '../components/Particles';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
 
@@ -147,10 +148,10 @@ const Register = () => {
                     {/* Already have an account? */}
                     <div className="flex items-center justify-between mt-4">
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
-                        <a href="/login" className="text-xs text-gray-500 uppercase hover:underline">
+                        <Link to="/login" className="text-xs text-gray-500 uppercase hover:underline">
                             {/* Already have an account? Sign In */}
                             OR Login
-                        </a>
+                        </Link>
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                     </div>
                 </div>
